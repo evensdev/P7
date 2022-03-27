@@ -1,42 +1,43 @@
 # Solution optimale
 
+import itertools
+
+
 def wallet_dynamique(budget, actions):
 
-    matrice = [[0 for x in range(budget + 1)] for x in range(len(actions) + 1)]
+    matrice = [[{"gain": 0,combinations:[]} for x in range(budget * 100 + 1)] for x in range(len(actions) + 1)]
 
     for i in range(1, len(actions) + 1):
+        
         for w in range(1, budget + 1):
+            
             if actions[i-1][1] <= w:
-                matrice[i][w] = max(actions[i-1][2] + matrice[i-1][w-actions[i-1][1]], matrice[i-1][w])
-            else:
-                matrice[i][w] = matrice[i-1][w]
-
-
+                
+                action_price = acions[i-1][1] * 100
+                action_gain = actions[i-1][1] * actions [i-1][2] / 100
+                
+                if(action_gain + matrice[i-1][w-(actions[i-1][1] * 100)].gain > matrice[i-1][w]):
+                    
+                    matrice[i][w] = {"gain": action_gain + matrice[i-1][w-actions[i-1][1] * 100].gain,
+                        "combinations": [actions[i-1][1]] + matrice[i-1][w].combinations}                   
+                    
+                else:
+                    matrice[i][w] = {
+                        "gain": action_gain + matrice[i-1][w-actions[i-1][1] * 100].gain,
+                        "combinations":[actions[i-1[1]] + 
+                        matrice[i-1][w]].combinations
+                        }
+                           
+                
+                
+    print("best gain : ", matrice[-1][-1].gain)        
+    print("best combinations : ", matrice[-1][-1].combinations)            
+                                
+                
     w = budget
     n = len(actions)
     actions_selection = []
-
-    while w >= 0 and n >= 0:
-        e = actions[n-1]
-        if matrice[n][w] == matrice[n-1][w-e[1]] + e[2]:
-            actions_selection.append(e)
-            w -= e[1]
-
-        n -= 1 
-
-    montant_depense = 0
-    taux_cumul = 0
-
-    for i in range(len(actions_selection)):
-        montant_depense += actions_selection[i][1]
-        taux_cumul += actions_selection[i][2]
-
-    print("Budget dépensé : ", montant_depense, "€")
-    print("nb d'actions : ",len(actions_selection))
-    print("taux d'intrêt moyen",round(taux_cumul/len(actions_selection)), "%")        
-
-    return actions_selection
-
+ 
 
 
 
@@ -61,7 +62,5 @@ wallet = [('Action-1', 20, 5),
     ('Action-19', 24, 21),
     ('Action-20',  114, 18)]
 
+
 print('Liste des actions : ', wallet_dynamique(500, wallet))
-
-
-
