@@ -25,43 +25,76 @@ depense = 0
 #Chaque ligne de la matrice correspondra à celle d'une action de la liste  (voir): https://bit.ly/397xbzn
 
 
-#création de la fonction portefeuille dynamique avec en paramètres :
-#1. le montant du budget = 500 et 2. la liste d'actions
+#création d'une fonction permettant de déterminer la meilleure combinaison d'actions 
+#pour maximiser le portefeuille en bénéfices dans les limites d'un budget fixé
+#La fonction aura deux paramètres :
+#1. le montant du budget = 500
+#2. la liste d'actions = wallet
 
 def wallet_dynamique(budget, actions):
     
+    
     #On représente en colonne le budget en n colonnes de zeros
     #On représente en lignes les actions en n quantité d'actions
+    
     
     matrice = [[0 for x in range(budget + 1)] for x in range(len(actions) + 1)]
     
     
     
-    #On fait une boucle pour chaque ligne d'actions en partant d'une ligne nulle d'où 20 + 1 ligne 
+    #On fait une boucle pour chaque ligne d'actions en partant d'une ligne nulle, d'où 20 + 1 ligne 
 
     for i in range(1, len(actions) + 1):
         
         
+        
+        
         #Pour chaque ligne on affecte chaque colonnes par pas de 1 jusqu'à la colonne finale
         #En commancant par une colonne de valeur zéro d'où 500 + 1 colonne
-        
+               
         
         for w in range(1, budget + 1):
             
+            #Si le coût de l'action est inférieure ou égale à la valeur de la colonne wallet
+            #Elle portera la valeur de l'action en cours ou la valeur de l'action de la précédente ligne ayant une maximale supérieure
+            
             if actions[i-1][1] <= w:
+                
+                
+                
+                #[i-1][2] représente le bénéfice de l'action précédente
+                #matrice[i][w] représente la cellule concernée par l'affectation 
                 
                 matrice[i][w] = max(actions[i-1][2] + matrice[i-1][w-actions[i-1][1]], matrice[i-1][w])
             else:
+                
+                #sinon la valeur de la cellule correspondra à la valeur de celle qui précède à la ligne au-dessus
+                
                 matrice[i][w] = matrice[i-1][w]
 
+                
+    #le montant du budget   
+    #le nombre d'actions dans la liste
+    #les actions sélectionnées qui se rapprochent du résultat au maximum du budget w
 
     w = budget
     n = len(actions)
     actions_selection = []
+    
+    
+    
+    
+    #Tant que le budget sera supérieur à 0 et que la quantité d'actions le sera aussi
+    #la variable e représente une action sélectionnée
+    
 
     while w >= 0 and n >= 0:
         
         e = actions[n-1]
+        
+        
+        #Si la valeur de l'action actuelle est égale à la valeur de la ligne précédente
+        #il faut ajouter l'action à la liste d'actions sélectionnées et soustraire son coût du budget w restant jusqu'à ce  qu'il n'y ai plus d'actions dans la liste
         
         if matrice[n][w] == matrice[n-1][w-e[1]] + e[2]:
             actions_selection.append(e)
@@ -69,14 +102,28 @@ def wallet_dynamique(budget, actions):
 
         n -= 1 
 
+        
+    #initilalisation des variable qui seront affectées pour les résultats
+    
     montant_depense = 0
-    taux_cumul = 0
     gains = 0
+    
+    
+    
+    #Pour chaque actions dans la liste il faudra :
+    #faire le coût total des actions et l'affecter à la variable montant_depense
+    #faire la somme totale des bénéfices et l'affecter à la variable gaind
 
+    
     for i in range(len(actions_selection)):
         montant_depense += actions_selection[i][1]
         gains += actions_selection[i][-1]
 
+    
+    #Afficher les résultats
+    #Afficher la liste d'actions
+        
+        
     print("Budget dépensé : ", montant_depense, "€")
     print("Nb d'actions : ",len(actions_selection))  
     print("Gains : ",gains,"€")
