@@ -1,5 +1,5 @@
 # Initialisation des variables qui serviront à afficher les résultats après l'exécution de la fonction
-# On s'intéresse au gain possible de réaliser, la meilleure combinaison, la taille de la liste d'action
+# On s'intéresse au gain possible de réaliser, la meilleure combinaison, la taille de la liste d'action.
 # Et le montant dépensé afin de s'assurer de l'exploitation optimale du budget
 
 
@@ -33,7 +33,7 @@ def wallet_dynamique(budget, actions):
 
     matrice = [[0 for x in range(budge t * 100 + 1)] for x in range(len(actions) + 1)]
 
-    # On fait une boucle pour chaque ligne d'actions en partant d'une ligne nulle, d'où 20 + 1 ligne.
+    # On fait une boucle pour chaque ligne d'actions en partant d'une ligne nulle, d'où 20 + 1 ligne
 
     for i in range(1, len(actions) + 1):
 
