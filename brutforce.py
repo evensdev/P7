@@ -1,38 +1,7 @@
-#Importation du package itertools qui nous permettra d'utiliser la fonction combinations
-#La fonction combinations permet de tester des combinaisons d'éléments pour obtenir le résultat maximal
 
-
-import itertools
-
-#La liste d'actions est représentée en sous forme de dictionnaire avec des clées et valeurs
-
-actions = [
-    {'ref':'Action-1','coût':20, 'benefice':5},
-    {'ref':'Action-2','coût':30, 'benefice':10},
-    {'ref':'Action-3','coût':50, 'benefice':15},
-    {'ref':'Action-4','coût':70, 'benefice':20},
-    {'ref':'Action-5','coût':60, 'benefice':17},
-    {'ref':'Action-6','coût':80, 'benefice':25},
-    {'ref':'Action-7','coût':22, 'benefice':7},
-    {'ref':'Action-8','coût':26, 'benefice':11},
-    {'ref':'Action-9','coût':48, 'benefice':13},
-    {'ref':'Action-10','coût':34, 'benefice':27},
-    {'ref':'Action-11','coût':42, 'benefice':17},
-    {'ref':'Action-12','coût':110, 'benefice':9},
-    {'ref':'Action-13','coût':38, 'benefice':23},
-    {'ref':'Action-14','coût':14, 'benefice':1},
-    {'ref':'Action-15','coût':18, 'benefice':3},
-    {'ref':'Action-16','coût':8, 'benefice':8},
-    {'ref':'Action-17','coût':4, 'benefice':12},
-    {'ref':'Action-18','coût':10, 'benefice':14},
-    {'ref':'Action-19','coût':24, 'benefice':21},
-    {'ref':'Action-20','coût':114, 'benefice':18}
-]
-
-
-#Initialisation des variables qui servirons à afficher les résultats après l'execution de la fonction
-#On s'intéresse au gain possible de réaliser, la meilleure combinaison, la taille de la liste d'actions
-#Et le montant dépensé afin de s'assurer de l'exploitation optimale du budget
+# Initialisation des variables qui serviront à afficher les résultats après l'execution de la fonction
+# On s'intéresse au gain possible de réaliser, la meilleure combinaison, la taille de la liste d'action
+# Et le montant dépensé afin de s'assurer de l'exploitation optimale du budget
 
 
 max_gain = 0
@@ -41,65 +10,148 @@ taille = 0
 depense = 0
 
 
+# On utilisera l'algorithme du sac à dos pour effectuer de la programmation dynamique
+# W représentera la capacité du sac soit le "budget maximal" de 500€
+# Wi représentera le poids de l'objet i soit la clé "coût" de l'action
+# Vi représentera la valeur de l'objet i soit la clé "bénéfice" de l'action
+# n représentera la "quantité" d'actions dans la liste
 
-#La boucle permettra de sauvegarder les combinaisons d'actions dépensant le maxium de budget
-#L'ensemble des résultat seront stockés dans la variable "best_combination"
 
-for taille in range(2, len(actions)+1):
-    
-    
-    
+# On crée une matrice en 2 dimensions
+# Le budget maximal sera représenté par n+1 quantités de colonnes correspondant à la valeur du budget en commençant par la colonne de valeur 0
+# Chaque ligne de la matrice correspondra à celle d'une action de la liste  (voir): https://bit.ly/397xbzn
 
-    #Mise en place de l'itérateur de combinaison avec 2 arguments n-uplets de longueur r, ordonnés, sans répétition d'éléments
-    #On a en argument la liste d'actions et sa taille
-    #Initialisation des variables gains et prix total qui seront incrémentées par la boucle
-    #À chaque fois qu'on aura une action, on affectera son prix à total_price et son bénéfice à total_gain
-    
-    for combination in itertools.combinations(actions,taille):
-        total_gain = 0
-        total_price = 0
-        
-        
-        
-        #incrementation des variables prix total et total gain pour chaque chaque combinaison retenues par l'algorithme
-        #les clés "bénéfices" et "coûts" permettront de prendre les bonnes valeurs à incrémenter dans les variables
-        
-        for element in combination:
-            total_price += element['coût']
-            total_gain += element['coût'] * element["benefice"] / 100
+
+# Création d'une fonction permettant de déterminer la meilleure combinaison d'actions
+# pour maximiser le portefeuille en bénéfices dans les limites d'un budget fixé
+# La fonction aura deux paramètres :
+# 1. le montant du budget = 500
+# 2. la liste d'actions = wallet
+
+def wallet_dynamique(budget, actions):
+
+
+    # On représente en colonne le budget en n colonnes de zéros
+    # On représente en lignes les actions en n quantité d'actions
+
+
+    matrice = [[0 for x in range(budge t *100 + 1)] for x in range(len(actions) + 1)]
+
+    # On fait une boucle pour chaque ligne d'actions en partant d'une ligne nulle, d'où 20 + 1 ligne
+
+    for i in range(1, len(actions) + 1):
+
+        price = actions[ i -1][1] *100
+        gains = int(price * actions[i - 1][2])
+
+        # Pour chaque ligne on affecte chaque colonne par pas de 1 jusqu'à la colonne finale.
+        # En commancant par une colonne de valeur zéro d'où 500 + 1 colonne
+
+        for w in range(1, budget * 100 + 1):
+
+            # Si le coût de l'action est inférieur ou égale à la valeur de la colonne wallet
+            # Elle portera la valeur de l'action en cours où la valeur de l'action de la précédente ligne ayant une maximale supérieure.
             
-            
-        #je délimite le budget maximal à dépenser grâce à une boucle conditionnelle
-        #si le prix total est inférieur à 500 et que le gain total est supérieur au gain maximal
-        #alors on arrêtera la boucle et on sauvegardera les résultats dans les variables
-        
-        if(total_price <= 500 and total_gain > max_gain):
-            max_gain = total_gain
-            best_combination = combination
+            if w == 0 or i == 0:
+                continue
 
-          
-        
-#boucle pour afficher chaque actions de la liste contenant les meilleures combinaisons
-#on récupère le côut de chaque action et on l'affecte à la variable dépense pour avoir le coût total
+            if 0 < price <= w:
 
-for i in range(len(best_combination)):
-    depense += best_combination[i]['coût']
+                try:
 
-    
-    
-    
-#On affiche le montant dépensé au total
-#On affiche le nombre d'actions utilisé
-#On affiche le gain total des actions
-    
-print("Montant dépensé :", depense, "€")            
-print("Nb d'actions : ", len(best_combination))
-print("Gains :",round(total_gain),"€")
+                    # gains  représente le bénéfice de l'action précédente
+                    # matrice[i][w] représente la cellule concernée par l'affectation
+                    matrice[i][w] = max(gains + matrice[i - 1][int(w - price)], matrice[i - 1][w])
 
 
-#On affiche la liste d'actions de la combinaison gagnante
+                except (BaseException, KeyError):
 
-for i in range(len(best_combination)):
-    print(best_combination[i])
+                    continue
 
- 
+
+            else:
+
+                # sinon la valeur de la cellule correspondra à la valeur de celle qui précède à la ligne au-dessus.
+                matrice[i][w] = matrice[i - 1][w]
+
+    # le montant du budget
+    # le nombre d'actions dans la liste
+    # les actions sélectionnées qui se rapprochent du résultat au maximum du budget w
+
+    w = budget * 100
+    n = len(actions)
+    actions_selection = []
+
+    # Tant que le budget sera supérieur à 0 et que la quantité d'actions le sera aussi,
+    # la variable e représente une action sélectionnée
+
+    while w >= 0 and n >= 0:
+
+        if not actions[n - 1][1] > 0:
+            n -= 1
+            continue
+
+        price = actions[n - 1][1] * 100
+        gains = int(price * actions[n - 1][2])
+
+        # Si la valeur de l'action actuelle est égale à la valeur de la ligne précédente.
+        # il faut ajouter l'action à la liste d'actions sélectionnées et soustraire son coût du budget w restant jusqu'à ce  qu'il n'y ai plus d'actions dans la liste
+
+        if matrice[n][w] == matrice[n - 1][int(w - price)] + gains:
+            actions_selection.append(actions[n - 1])
+            w -= int(price)
+
+        n -= 1
+
+        # initialisation des variables qui seront affectées pour les résultats
+
+    montant_depense = 0
+    gains = 0
+
+    # Pour chaque action dans la liste il faudra :
+    # faire le coût total des actions et l'affecter à la variable montant_depense
+    # faire la somme totale des bénéfices et l'affecter à la variable gaind
+
+    for i in range(len(actions_selection)):
+        montant_depense += actions_selection[i][1]
+
+    # Afficher les résultats
+    # Afficher la liste d'actions
+
+    print(matrice[-1][-1])
+    print("Budget dépensé : ", montant_depense, "€")
+    print("Nb d'actions : ", len(actions_selection))
+    print("Gains : ", round(matrice[-1][-1] / 10000, 2), "€")
+
+    return actions_selection, matrice[-1][-1]
+
+
+wallet = [('Action-1', 20, 5),
+          ('Action-2', 30, 10),
+          ('Action-3', 50, 15),
+          ('Action-4', 70, 20),
+          ('Action-5', 60, 17),
+          ('Action-6', 80, 25),
+          ('Action-7', 22, 7),
+          ('Action-8', 26, 11),
+          ('Action-9', 48, 13),
+          ('Action-10', 34, 27),
+          ('Action-11', 42, 17),
+          ('Action-12', 110, 9),
+          ('Action-13', 38, 23),
+          ('Action-14', 14, 1),
+          ('Action-15', 18, 3),
+          ('Action-16', 8, 8),
+          ('Action-17', 4, 12),
+          ('Action-18', 10, 14),
+          ('Action-19', 24, 21),
+          ('Action-20', 114, 18)]
+
+print('Liste des actions : ', wallet_dynamique(500, wallet))
+
+
+
+
+
+
+
