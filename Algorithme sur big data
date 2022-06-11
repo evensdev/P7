@@ -1,3 +1,21 @@
+#Importation des packages et librairies
+
+import pandas as pd
+import numpy as np
+import matplotlib as plt
+
+#importation du fichier csv pour le dataset 1
+
+data = pd.read_csv('dataset1_Python+P7.csv')
+
+
+#transformation du dataframe en dictionnaire 
+
+d1 = data.to_dict("split")
+
+
+
+
 
 #Initialisation des variables qui serviront à afficher les résultats après l'exécution de la fonction
 #On s'intéresse au gain possible de réaliser, la meilleure combinaison, la taille de la liste d'actions.
@@ -106,7 +124,7 @@ def wallet_dynamique(budget, actions):
         gains = int(price * actions[n-1][2])
   
         
-        #Si la valeur de l'action actuelle est égale à la valeur de la ligne précédente
+        #Si la valeur de l'action actuelle est égale à la valeur de la ligne précédente.
         #il faut ajouter l'action à la liste d'actions sélectionnées et soustraire son coût du budget w restant jusqu'à ce  qu'il n'y ai plus d'actions dans la liste.
         
         
