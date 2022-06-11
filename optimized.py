@@ -1,5 +1,5 @@
-# Initialisation des variables qui serviront à afficher les résultats après l'exécution de la fonction
-# On s'intéresse au gain possible de réaliser, la meilleure combinaison, la taille de la liste d'action.
+# Initialisation des variables qui serviront à afficher les résultats après l'execution de la fonction
+# On s'intéresse au gain possible de réaliser, la meilleure combinaison, la taille de la liste d'action
 # Et le montant dépensé afin de s'assurer de l'exploitation optimale du budget
 
 
@@ -17,7 +17,7 @@ depense = 0
 
 
 # On crée une matrice en 2 dimensions
-# Le budget maximal sera représenté par n+1 quantité de colonnes correspondant à la valeur du budget en commençant par la colonne de valeur 0
+# Le budget maximal sera représenté par n+1 quantités de colonnes correspondant à la valeur du budget en commençant par la colonne de valeur 0
 # Chaque ligne de la matrice correspondra à celle d'une action de la liste  (voir): https://bit.ly/397xbzn
 
 
@@ -31,7 +31,7 @@ def wallet_dynamique(budget, actions):
     # On représente en colonne le budget en n colonnes de zéros
     # On représente en lignes les actions en n quantité d'actions
 
-    matrice = [[0 for x in range(budge t * 100 + 1)] for x in range(len(actions) + 1)]
+    matrice = [[0 for x in range(budget * 100 + 1)] for x in range(len(actions) + 1)]
 
     # On fait une boucle pour chaque ligne d'actions en partant d'une ligne nulle, d'où 20 + 1 ligne
 
